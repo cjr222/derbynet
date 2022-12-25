@@ -1,6 +1,6 @@
 ## docker build -t derbynet_server -f installer/docker/Dockerfile .
 
-FROM ubuntu:21.04
+FROM ubuntu:22.04
 LABEL org.opencontainers.image.authors=jeffpiazza
 LABEL description="DerbyNet is the new standard in race management software for Pinewood Derby events.  \
 Visit http://jeffpiazza.github.io/derbynet/ for more information about DerbyNet."
@@ -12,10 +12,10 @@ ENV TZ=America/New_York
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt update
-RUN apt install -y php7.4-fpm php7.4-curl php7.4-gd php7.4-sqlite3
+RUN apt install -y php8.1-fpm php8.1-curl php8.1-gd php8.1-sqlite3
 # php-odbc installs OK on a separate line, but not when added to the previous line.
 # No idea why
-RUN apt install -y php7.4-odbc
+RUN apt install -y php8.1-odbc
 RUN apt install -y nginx ssl-cert
 RUN apt install -y supervisor
 
@@ -56,7 +56,7 @@ RUN sed -i.pre-derbynet \
     -e "s#^post_max_size = [2-8]M#post_max_size = $MAX_UPLOAD_SIZE#" \
     -e "s#^memory_limit = 128M#memory_limit = 256M#" \
     -e "s#^session.gc_maxlifetime = 1440#session.gc_maxlifetime = 28800#" \
-    /etc/php/7.4/fpm/php.ini
+    /etc/php/8.1/fpm/php.ini
 
 RUN sed -i -e '/^[ \t]*location \/ {/ i\
   include derbynet/location.snippet; \
